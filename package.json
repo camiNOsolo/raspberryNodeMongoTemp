@@ -1,0 +1,14 @@
+{
+  "name" : "TEMP",
+  "version" : "0.0.1",
+  "description" : "RASPBERRY",
+  "main" : "index.js",
+  "dependencies" : {
+    "express" : "latest",
+    "method-override" : "latest",
+    "body-parser" : "latest",
+    "errorhandler" : "latest",
+    "socket.io" : "latest",
+    "mongodb" : "latest"
+  }
+}

@@ -1,0 +1,66 @@
+<html>
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width" />
+	<title>
+		Status
+	</title>
+    <!-- Importo el módulo socket.io que tengo en el proyecto -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <!-- Importo el archivo Javascript de Highcharts directamente desde su servidor -->
+    <script src="https://code.highcharts.com/highcharts.js"></script> 
+</head>
+<body>
+    <!-- Creo el div donde tendré la gráfica. Le digo que ocupe todo el ancho
+         de la pantalla y 400px de alto -->
+    <div id="chart" style="width:100%; height:400px;"></div>
+    <!-- Comienza el Javascript -->
+  
+ <script>
+
+    // Creo un WebSocket con la IP del servidor 
+    var socket = io.connect('minibian.ddns.net:5000');
+    console.log(socket);
+    // Creo un nuevo objeto 'Chart'
+    var chart;
+    chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'chart', 
+            defaultSeriesType: 'spline',
+            events: {
+                load: function() {
+                    // Cada vez que reciba un valor desde el socket, lo meto en la gráfica
+                    socket.on('temperatureUpdate', function (time, data) {
+                        var series = chart.series[0];
+                        series.addPoint([time, data]);
+                    });
+                }
+            }
+        },
+        rangeSelector : {
+            selected : 100
+        },
+        title: {
+            text: 'Temperatura de la CPU en el Servidor'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150,
+            maxZoom: 20 * 1000
+        },
+        yAxis: {
+            minPadding: 0.2,
+            maxPadding: 0.2,
+            title: {
+                text: 'Temperatura ºC',
+                margin: 80
+            }
+        },
+        series: [{
+            name: 'Temperatura',
+            data: []
+        }]
+    });
+    </script>
+</body>
+</html>
